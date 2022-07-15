@@ -65,12 +65,14 @@ enum GameMode {
 
 struct State {
     mode: GameMode,
+    score: i32,
 }
 
 impl State {
     fn new() -> Self {
         State {
             mode: GameMode::Menu,
+            score: 0,
         }
     }
 
@@ -80,6 +82,14 @@ impl State {
         ctx.print_color_centered(8, CYAN, BLACK, "(P) Play Game");
         ctx.print_color_centered(9, CYAN, BLACK, "(Q) Quit Game");
     }
+
+    fn end(&mut self, ctx: &mut BTerm) {
+        ctx.cls();
+        ctx.print_color_centered(5, RED, BLACK, "You are dead!");
+        ctx.print_centered(6, &format!("Your score: {}", self.score));
+        ctx.print_color_centered(8, CYAN, BLACK, "(P) Play Again");
+        ctx.print_color_centered(9, CYAN, BLACK, "(Q) Quit Game");
+    }
 }
 
 impl GameState for State {
@@ -87,7 +97,7 @@ impl GameState for State {
         match self.mode {
             GameMode::Menu => self.menu(ctx),
             GameMode::Playing => {},
-            GameMode::End => {},
+            GameMode::End => self.end(ctx),
         }
     }
 }
