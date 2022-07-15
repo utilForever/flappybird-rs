@@ -73,6 +73,26 @@ impl Obstacle {
             size: random.range(2, 10 - score),
         }
     }
+
+    fn render(&mut self, ctx: &mut BTerm, player_pos_x: i32) {
+        // Ground
+        for x in 0..SCREEN_WIDTH {
+            ctx.set(x, SCREEN_HEIGHT - 1, WHITE, WHITE, to_cp437('#'));
+        }
+
+        let screen_pos_x = self.x - player_pos_x;
+        let size_half = self.size / 2;
+
+        // Top wall
+        for y in 0..self.y_gap - size_half {
+            ctx.set(screen_pos_x, y, WHITE, NAVY, 179);
+        }
+
+        // Bottom wall
+        for y in self.y_gap + size_half..SCREEN_HEIGHT - 1 {
+            ctx.set(screen_pos_x, y, WHITE, NAVY, 179);
+        }
+    }
 }
 
 enum GameMode {
@@ -114,7 +134,7 @@ impl GameState for State {
     fn tick(&mut self, ctx: &mut BTerm) {
         match self.mode {
             GameMode::Menu => self.menu(ctx),
-            GameMode::Playing => {},
+            GameMode::Playing => {}
             GameMode::End => self.end(ctx),
         }
     }
