@@ -3,6 +3,8 @@ use bracket_lib::prelude::*;
 const SCREEN_WIDTH: i32 = 40;
 const SCREEN_HEIGHT: i32 = 25;
 
+const DRAGON_FRAMES: [u16; 6] = [64, 1, 2, 3, 2, 1];
+
 struct Player {
     x: i32,
     y: f32,
@@ -37,6 +39,21 @@ impl Player {
 
     fn flap(&mut self) {
         self.velocity = -2.0;
+    }
+
+    fn render(&mut self, ctx: &mut BTerm) {
+        ctx.set_active_console(1);
+        ctx.cls();
+        ctx.set_fancy(
+            PointF::new(0.0, self.y),
+            1,
+            Degrees::new(0.0),
+            PointF::new(2.0, 2.0),
+            WHITE,
+            NAVY,
+            DRAGON_FRAMES[self.frame],
+        );
+        ctx.set_active_console(0);
     }
 }
 
