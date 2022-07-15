@@ -3,6 +3,24 @@ use bracket_lib::prelude::*;
 const SCREEN_WIDTH: i32 = 40;
 const SCREEN_HEIGHT: i32 = 25;
 
+struct Player {
+    x: i32,
+    y: f32,
+    velocity: f32,
+    frame: usize,
+}
+
+impl Player {
+    fn new(x: i32, y: i32) -> Self {
+        Player {
+            x,
+            y: y as f32,
+            velocity: 0.0,
+            frame: 0,
+        }
+    }
+}
+
 struct State {}
 
 impl State {
