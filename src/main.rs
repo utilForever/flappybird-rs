@@ -57,6 +57,24 @@ impl Player {
     }
 }
 
+struct Obstacle {
+    x: i32,
+    y_gap: i32,
+    size: i32,
+}
+
+impl Obstacle {
+    fn new(x: i32, score: i32) -> Self {
+        let mut random = RandomNumberGenerator::new();
+
+        Obstacle {
+            x,
+            y_gap: random.range(5, 20),
+            size: random.range(2, 10 - score),
+        }
+    }
+}
+
 enum GameMode {
     Menu,
     Playing,
