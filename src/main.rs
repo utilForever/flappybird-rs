@@ -34,6 +34,10 @@ impl Player {
         self.x += 1;
         self.frame = (self.frame + 1) % 6;
     }
+
+    fn flap(&mut self) {
+        self.velocity = -2.0;
+    }
 }
 
 struct State {}
