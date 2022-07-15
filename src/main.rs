@@ -93,6 +93,14 @@ impl Obstacle {
             ctx.set(screen_pos_x, y, WHITE, NAVY, 179);
         }
     }
+
+    fn is_hit(&self, player: &Player) -> bool {
+        let size_half = self.size / 2;
+
+        player.x == self.x
+            && ((player.y as i32) < self.y_gap - size_half
+                || (player.y as i32) > self.y_gap + size_half)
+    }
 }
 
 enum GameMode {
