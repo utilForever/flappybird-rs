@@ -57,16 +57,32 @@ impl Player {
     }
 }
 
-struct State {}
+enum GameMode {
+    Menu,
+    Playing,
+    End,
+}
+
+struct State {
+    mode: GameMode,
+}
 
 impl State {
     fn new() -> Self {
-        State {}
+        State {
+            mode: GameMode::Menu,
+        }
     }
 }
 
 impl GameState for State {
-    fn tick(&mut self, ctx: &mut BTerm) {}
+    fn tick(&mut self, ctx: &mut BTerm) {
+        match self.mode {
+            GameMode::Menu => {},
+            GameMode::Playing => {},
+            GameMode::End => {},
+        }
+    }
 }
 
 fn main() -> BError {
