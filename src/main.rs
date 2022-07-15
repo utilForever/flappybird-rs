@@ -2,6 +2,7 @@ use bracket_lib::prelude::*;
 
 const SCREEN_WIDTH: i32 = 40;
 const SCREEN_HEIGHT: i32 = 25;
+const FRAME_DURATION: f32 = 75.0;
 
 const DRAGON_FRAMES: [u16; 6] = [64, 1, 2, 3, 2, 1];
 
@@ -110,6 +111,9 @@ enum GameMode {
 }
 
 struct State {
+    player: Player,
+    frame_time: f32,
+    obstacle: Obstacle,
     mode: GameMode,
     score: i32,
 }
@@ -117,6 +121,9 @@ struct State {
 impl State {
     fn new() -> Self {
         State {
+            player: Player::new(5, 25),
+            frame_time: 0.0,
+            obstacle: Obstacle::new(SCREEN_WIDTH, 0),
             mode: GameMode::Menu,
             score: 0,
         }
@@ -127,6 +134,36 @@ impl State {
         ctx.print_color_centered(5, YELLOW, BLACK, "Welcome to Flappy Bird!");
         ctx.print_color_centered(8, CYAN, BLACK, "(P) Play Game");
         ctx.print_color_centered(9, CYAN, BLACK, "(Q) Quit Game");
+    }
+
+    fn play(&mut self, ctx: &mut BTerm) {
+        ctx.cls_bg(NAVY);
+
+        self.frame_time += ctx.frame_time_ms;
+
+        if self.frame_time > FRAME_DURATION {
+            self.frame_time = 0.0;
+            self.player.apply_gravity_and_move();
+        }
+
+        if let Some(VirtualKeyCode::Space) = ctx.key {
+            self.player.flap();
+        }
+
+        self.player.render(ctx);
+        ctx.print(0, 0, "Press SPACE to flap.");
+        ctx.print(0, 1, &format!("Score: {}", self.score));
+
+        self.obstacle.render(ctx, self.player.x);
+
+        if self.player.x > self.obstacle.x {
+            self.score += 1;
+            self.obstacle = Obstacle::new(self.player.x + SCREEN_WIDTH, self.score);
+        }
+
+        if self.player.y as i32 > SCREEN_HEIGHT || self.obstacle.is_hit(&self.player) {
+            self.mode = GameMode::End;
+        }
     }
 
     fn end(&mut self, ctx: &mut BTerm) {
@@ -142,7 +179,7 @@ impl GameState for State {
     fn tick(&mut self, ctx: &mut BTerm) {
         match self.mode {
             GameMode::Menu => self.menu(ctx),
-            GameMode::Playing => {}
+            GameMode::Playing => self.play(ctx),
             GameMode::End => self.end(ctx),
         }
     }
