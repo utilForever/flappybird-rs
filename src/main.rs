@@ -73,12 +73,19 @@ impl State {
             mode: GameMode::Menu,
         }
     }
+
+    fn menu(&mut self, ctx: &mut BTerm) {
+        ctx.cls();
+        ctx.print_color_centered(5, YELLOW, BLACK, "Welcome to Flappy Bird!");
+        ctx.print_color_centered(8, CYAN, BLACK, "(P) Play Game");
+        ctx.print_color_centered(9, CYAN, BLACK, "(Q) Quit Game");
+    }
 }
 
 impl GameState for State {
     fn tick(&mut self, ctx: &mut BTerm) {
         match self.mode {
-            GameMode::Menu => {},
+            GameMode::Menu => self.menu(ctx),
             GameMode::Playing => {},
             GameMode::End => {},
         }
