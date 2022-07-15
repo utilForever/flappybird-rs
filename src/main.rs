@@ -173,6 +173,14 @@ impl State {
         ctx.print_color_centered(8, CYAN, BLACK, "(P) Play Again");
         ctx.print_color_centered(9, CYAN, BLACK, "(Q) Quit Game");
     }
+
+    fn restart(&mut self) {
+        self.player = Player::new(5, SCREEN_WIDTH / 2);
+        self.frame_time = 0.0;
+        self.obstacle = Obstacle::new(SCREEN_WIDTH, 0);
+        self.mode = GameMode::Playing;
+        self.score = 0;
+    }
 }
 
 impl GameState for State {
