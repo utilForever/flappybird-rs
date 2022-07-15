@@ -134,6 +134,14 @@ impl State {
         ctx.print_color_centered(5, YELLOW, BLACK, "Welcome to Flappy Bird!");
         ctx.print_color_centered(8, CYAN, BLACK, "(P) Play Game");
         ctx.print_color_centered(9, CYAN, BLACK, "(Q) Quit Game");
+
+        if let Some(key) = ctx.key {
+            match key {
+                VirtualKeyCode::P => self.restart(),
+                VirtualKeyCode::Q => ctx.quitting = true,
+                _ => {}
+            }
+        }
     }
 
     fn play(&mut self, ctx: &mut BTerm) {
@@ -172,6 +180,14 @@ impl State {
         ctx.print_centered(6, &format!("Your score: {}", self.score));
         ctx.print_color_centered(8, CYAN, BLACK, "(P) Play Again");
         ctx.print_color_centered(9, CYAN, BLACK, "(Q) Quit Game");
+
+        if let Some(key) = ctx.key {
+            match key {
+                VirtualKeyCode::P => self.restart(),
+                VirtualKeyCode::Q => ctx.quitting = true,
+                _ => {}
+            }
+        }
     }
 
     fn restart(&mut self) {
