@@ -19,6 +19,21 @@ impl Player {
             frame: 0,
         }
     }
+
+    fn apply_gravity_and_move(&mut self) {
+        if self.velocity < 2.0 {
+            self.velocity += 0.1;
+        }
+
+        self.y += self.velocity;
+
+        if self.y < 0.0 {
+            self.y = 0.0;
+        }
+
+        self.x += 1;
+        self.frame = (self.frame + 1) % 6;
+    }
 }
 
 struct State {}
